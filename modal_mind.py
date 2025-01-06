@@ -30,20 +30,39 @@
 # Task 1: Modals in the Gutenberg Corpus
 
 # - Task 1.1: Install NLTK
-# What this code is doing:
-#
+# What this code is doing: Importing the NLTK library to allow the download of the gutenberg texts
+import nltk
+from nltk.corpus import gutenberg
 
 # - Task 1.2: Download the Gutenberg Corpus
-# What this code is doing:
-#
+# What this code is doing: Downloading the gutenberg texts and splitter. Storing all texts to a variable to print what they are
+#nltk.download('gutenberg')
+#nltk.download('punkt')
+
+texts = gutenberg.fileids()
+# checking each file
+for text in texts:
+    print(text)
 
 # - Task 1.3: Define Each Modal Group
-# What this code is doing:
-#
+# What this code is doing: Creating a list of modal verbs I wnat to look for within the texts
+list_of_modals = ['can', 'could', 'may', 'might', 'will', 'would', 'should']
 
 # - Task 1.4: Count Relative Frequencies of Each Modal Verb
-# What this code is doing:
-#
+# What this code is doing: Creating a dictionary to store the modals and their counts. Then, I need to loop through each file in the gutenberg tests, looking for each modal verb and counting them
+frequency_of_modals = {}
+for text in texts:
+    words = gutenberg.words(text)
+    #print(words)
+    count_modal = {}
+    for modal in list_of_modals:
+        count_modal[modal] = words.count(modal)
+    frequency_of_modals[text] = count_modal
+
+for text, counts in frequency_of_modals.items():
+    print(f"Text: {text}")
+    for modal, count in counts.items():
+        print(f"{modal}: {count}\n")
 
 # - Task 1.5: Find the Texts with the Largest Span of Modal Frequencies
 # What this code is doing:
