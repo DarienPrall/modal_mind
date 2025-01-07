@@ -41,8 +41,8 @@ from nltk.corpus import gutenberg
 
 texts = gutenberg.fileids()
 # checking each file
-for text in texts:
-    print(text)
+#for text in texts:
+#    print(text)
 
 # - Task 1.3: Define Each Modal Group
 # What this code is doing: Creating a list of modal verbs I wnat to look for within the texts
