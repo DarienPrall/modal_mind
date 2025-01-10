@@ -107,7 +107,7 @@ for file, dic_modal_counts in frequency_of_modals_by_file.items():
 # - Task 1.6: Compare Usage of Modals in the Two Texts
 # What this code is doing: This code is looping through each key:value in the modal_span_information to print each of the modals. 
 # It is then getting the file names of where the modal appears the most and least and then prints the results
-# The words are used differently in the two texts because.......
+
 for modal, span in modal_span_information.items():
     #print(f"Modal: {modal}")
     most_modal_count_file = gutenberg.words(span['most_frequent_file'])
@@ -116,67 +116,45 @@ for modal, span in modal_span_information.items():
     least_modal_count = least_modal_count_file.count(modal)
     max_length = len(most_modal_count_file)
     min_length = len(least_modal_count_file)
-    #print(f" Appears most frequent in {span['most_frequent_file']}:\n  {most_modal_count} times out of {max_length} total words. Relative Frequency = {most_modal_count / max_length:.6f}")
-    #print(f" Appears the least frequent in {span['least_frequent_file']}:\n  {least_modal_count} times out of {min_length} total words. Relative Frequency = {least_modal_count / min_length:.6f}")
-#----------------------------------------------------------------------
+    print(f" Appears most frequent in {span['most_frequent_file']}:\n  {most_modal_count} times out of {max_length} total words. Relative Frequency = {most_modal_count / max_length:.6f}")
+    print(f" Appears the least frequent in {span['least_frequent_file']}:\n  {least_modal_count} times out of {min_length} total words. Relative Frequency = {least_modal_count / min_length:.6f}")
 
-#----------------------------------------------------------------------
-# Task 2: Inaugural Corpus - Analyzing Kennedy's 1961 Speech
+table_data = []
+headers = ["Modal", "Most Frequent File", "Most Frequent Count", "Most Frequent Total Words", "Most Frequent Frequency", 
+           "Least Frequent File", "Least Frequent Count", "Least Frequent Total Words", "Least Frequent Frequency"]
 
-# - Task 2.1: Download the Inaugural Corpus
-# What this code is doing:
-from nltk.corpus import inaugural
-nltk.download('inaugural')
 
-# - Task 2.2: Load the 1961 Kennedy Speech
-# What this code is doing: Getting all of the files in inaugural so I can see the name of the Kenndey Speech file (even though it was provided). It grabs the contents of the speech and then splits its contents into words.
-all_files = inaugural.fileids()
-#for file in all_files:
-#    print(file)
-
-kennedys_speech = inaugural.words('1961-Kennedy.txt')
-
-# - Task 2.3: Identify the 10 Most Frequent Used Long Words
-# What this code is doing: This code is looking for any words that are over 7-characters in length and appending them to an array. The words then need to be added to a dictionary with the word being the key and the count being the value. The dictionary can then be sorted to get the top 10 long words
-
-long_words = []
-for word in kennedys_speech:
-    if len(word) > 7:
-        long_words.append(word.lower())
-
-frequency_of_long_words = {}
-
-for word in long_words:
-    if word in frequency_of_long_words:
-        frequency_of_long_words[word] += 1
-    else:
-        frequency_of_long_words[word] = 1
-
-sorted_long_words_frequency = sorted(frequency_of_long_words.items(), key = lambda x: x[1], reverse = True)
-top_10_long_words = sorted_long_words_frequency[:10]
-print(f"The top ten long words in Kennedy's 1961 Speech are: {top_10_long_words}")
-
-# - Task 2.4: Use WordNet to Find Synonyms and Hyponyms
-# What this code is doing: 
-from nltk.corpus import wordnet as wn
-nltk.download('wordnet')
-
-for word, _ in top_10_long_words:
-    synonyms = []
-    hyponyms = []
+for modal, span in modal_span_information.items():
+    most_modal_count_file = gutenberg.words(span['most_frequent_file'])
+    least_modal_count_file = gutenberg.words(span['least_frequent_file'])
     
-    for synset in wn.synsets(word):
-
-        for lemma in synset.lemma_names():
-            if lemma not in synonyms:
-                synonyms.append(lemma)
-        
-        for hypo in synset.hyponyms():
-            for lemma in hypo.lemma_names():
-                if lemma not in hyponyms:
-                    hyponyms.append(lemma)
+    most_modal_count = most_modal_count_file.count(modal)
+    least_modal_count = least_modal_count_file.count(modal)
     
-    print(f"Word: {word}")
-    print(f"  Synonyms: {', '.join(synonyms)}")
-    print(f"  Hyponyms: {', '.join(hyponyms)}")
-    print()
+    max_length = len(most_modal_count_file)
+    min_length = len(least_modal_count_file)
+    
+    most_modal_frequency = most_modal_count / max_length
+    least_modal_frequency = least_modal_count / min_length
+    
+    table_data.append([
+        modal, 
+        span['most_frequent_file'], 
+        most_modal_count, 
+        max_length, 
+        f"{most_modal_frequency:.6f}",
+        span['least_frequent_file'], 
+        least_modal_count, 
+        min_length, 
+        f"{least_modal_frequency:.6f}"
+    ])
+
+print(tabulate(table_data, headers=headers, tablefmt="grid"))
+
+# Explaination of Why the Modal Counts are Different Between Two Texts:
+# Setting aside that the books are different, as this is not a good enough explaination of why texts are different across books, its better to look at the time and tone of the texts.
+# Formality: Some texts may be more formal than others so woulds like 'may' and 'shall' would appear more. The author may be indicating obligation or necessity.
+# Type of Storytelling: The story could be a narrative or a descriptive text in which hypothetical and conditional modals are used more. These tend to explore potential outcomes of character choices.
+# Audience: Depending on who the text is written for could could determine how casual modals are used like 'may' and 'could' that fit a more conversational tone.
+# Technicality: If the text is in the form of a techincal document, it may focus on precision and clarity with modals like "must"
+#----------------------------------------------------------------------
