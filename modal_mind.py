@@ -58,6 +58,7 @@ frequency_of_modals_by_file = {
 # FILE : {modal: count}
 
 }
+from tabulate import tabulate
 
 for file in files:
     file_words = gutenberg.words(file)
@@ -71,6 +72,10 @@ for file in files:
     for modal in list_of_modals:
         count_of_each_modal_in_file[modal] = lowercase_file_words.count(modal)
     frequency_of_modals_by_file[file] = count_of_each_modal_in_file
+
+frequency_table = [(modal, count) for modal, count in frequency_of_modals_by_file.items()]
+print(tabulate(frequency_table, headers=["Modal", "Count"], tablefmt="grid"))
+
 
 # - Task 1.5: Find the Texts with the Largest Span of Modal Frequencies
 # What this code is doing: 
@@ -102,7 +107,7 @@ for file, dic_modal_counts in frequency_of_modals_by_file.items():
 # - Task 1.6: Compare Usage of Modals in the Two Texts
 # What this code is doing: This code is looping through each key:value in the modal_span_information to print each of the modals. 
 # It is then getting the file names of where the modal appears the most and least and then prints the results
-#
+# The words are used differently in the two texts because.......
 for modal, span in modal_span_information.items():
     #print(f"Modal: {modal}")
     most_modal_count_file = gutenberg.words(span['most_frequent_file'])
@@ -152,7 +157,7 @@ top_10_long_words = sorted_long_words_frequency[:10]
 print(f"The top ten long words in Kennedy's 1961 Speech are: {top_10_long_words}")
 
 # - Task 2.4: Use WordNet to Find Synonyms and Hyponyms
-# What this code is doing:
+# What this code is doing: 
 from nltk.corpus import wordnet as wn
 nltk.download('wordnet')
 
